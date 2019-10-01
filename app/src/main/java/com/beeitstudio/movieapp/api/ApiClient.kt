@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit
 
 object ApiClient {
 
-    private const val BASE_URL = "https://open-api.xyz/"
+    private const val BASE_URL = "https://api.themoviedb.org/3/"
 
     private val client: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(60, TimeUnit.SECONDS)
@@ -19,7 +19,8 @@ object ApiClient {
                 .addHeader("Authorization", "")
             val request = requestBuilder.build()
             chain.proceed(request)
-        }.build()
+        }
+        .build()
 
     private val retrofitBuilder: Retrofit.Builder by lazy {
         Retrofit.Builder()

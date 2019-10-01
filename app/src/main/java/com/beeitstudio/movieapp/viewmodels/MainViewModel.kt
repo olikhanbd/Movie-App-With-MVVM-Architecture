@@ -1,27 +1,20 @@
 package com.beeitstudio.movieapp.viewmodels
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.beeitstudio.movieapp.models.User
+import com.beeitstudio.movieapp.models.DiscoverResponse
+import com.beeitstudio.movieapp.models.Resource
+import com.beeitstudio.movieapp.repositories.DiscoverRepository
 import com.beeitstudio.movieapp.repositories.UserRepository
 
 class MainViewModel : ViewModel() {
 
-    private val _userId: MutableLiveData<String> = MutableLiveData()
+    val apiKey = "f81089fd8467193bd7777ddd251f2c9e"
+    val releaseDate = "2010"
+    val sortBy = "vote_average.desc"
 
-    val user: LiveData<User> = Transformations
-        .switchMap(_userId) { userid ->
-            UserRepository.getUser(userid)
-        }
-
-    fun setUserid(userid: String) {
-        val update = userid
-        if (_userId.value == update)
-            return
-        _userId.value = update
-    }
+    val response: LiveData<Resource<DiscoverResponse>> =
+        DiscoverRepository.getDiscovers(apiKey, releaseDate, sortBy)
 
     fun cancelJob() {
         UserRepository.cancelJobs()
