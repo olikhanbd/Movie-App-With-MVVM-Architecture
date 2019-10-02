@@ -8,7 +8,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 
-object DiscoverRepository {
+object MainRepository {
 
     var job: CompletableJob? = null
 

@@ -6,7 +6,7 @@ import com.beeitstudio.movieapp.models.DiscoverResponse
 import com.beeitstudio.movieapp.models.Resource
 import com.beeitstudio.movieapp.repositories.MainRepository
 
-class MainViewModel : ViewModel() {
+class HomeViewModel : ViewModel() {
 
     val apiKey = "f81089fd8467193bd7777ddd251f2c9e"
     val releaseDate = "2010"
