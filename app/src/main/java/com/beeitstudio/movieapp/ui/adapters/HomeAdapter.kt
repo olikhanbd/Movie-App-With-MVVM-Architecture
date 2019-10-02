@@ -6,11 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.beeitstudio.movieapp.R
 import com.beeitstudio.movieapp.models.Movie
+import com.beeitstudio.movieapp.utils.AppConstants.Companion.BASE_IMG_URL
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.item_home.view.*
 
 class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    val TAG = HomeAdapter::class.java.simpleName
 
     private var items: List<Movie> = ArrayList()
 
@@ -51,14 +54,16 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun bind(movie: Movie) {
             tvTitle.text = movie.title
-            tvRating.text = movie.voteAverage.toString()
+            tvRating.text = movie.vote_average.toString()
 
             val requestOptions = RequestOptions()
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_background)
 
+            val imgurl = "$BASE_IMG_URL/w185${movie.poster_path}"
+
             Glide.with(itemView.context)
-                .load(movie.posterPath)
+                .load(imgurl)
                 .apply(requestOptions)
                 .into(ivPoster)
         }

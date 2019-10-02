@@ -2,8 +2,9 @@ package com.beeitstudio.movieapp.repositories
 
 import androidx.lifecycle.LiveData
 import com.beeitstudio.movieapp.api.ApiClient
-import com.beeitstudio.movieapp.models.DiscoverResponse
+import com.beeitstudio.movieapp.models.Movie
 import com.beeitstudio.movieapp.models.Resource
+import com.beeitstudio.movieapp.models.TmdbResponse
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -12,12 +13,12 @@ object HomeRepository {
 
     var job: CompletableJob? = null
 
-    fun getDiscovers(apiKey: String, releaseDate: String, sortBy: String):
-            LiveData<Resource<DiscoverResponse>> {
+    fun getLatest(apiKey: String, page: Int, language:String):
+            LiveData<Resource<TmdbResponse>> {
 
         job = Job()
 
-        return object : LiveData<Resource<DiscoverResponse>>() {
+        return object : LiveData<Resource<TmdbResponse>>() {
 
             override fun onActive() {
                 super.onActive()
@@ -26,7 +27,7 @@ object HomeRepository {
                         try {
                             postValue(Resource.loading())
                             val discovers =
-                                ApiClient.apiService.getDiscovers(apiKey, releaseDate, sortBy)
+                                ApiClient.apiService.getLatest(apiKey,page, language)
                             withContext(Main) {
                                 value = Resource.success(discovers)
                                 job.complete()

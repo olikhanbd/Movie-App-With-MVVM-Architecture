@@ -55,8 +55,11 @@ class HomeFragment : Fragment() {
         viewModel.response.observe(this, Observer {
             when(it.status){
                 Status.SUCCESS -> {
+                    Log.d(TAG, "Success")
+                    Log.d(TAG, it.data.toString())
                     val data = it.data
                     data?.let { response ->
+                        Log.d(TAG, response.results.toString())
                         adapter.submitList(response.results)
                     }
                 }

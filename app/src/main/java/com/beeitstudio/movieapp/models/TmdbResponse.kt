@@ -1,6 +1,6 @@
 package com.beeitstudio.movieapp.models
 
-data class DiscoverResponse (
+data class TmdbResponse (
     val page: Long,
     val totalResults: Long,
     val totalPages: Long,

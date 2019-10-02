@@ -4,15 +4,15 @@ data class Movie (
     val popularity: Double,
     val id: Long,
     val video: Boolean,
-    val voteCount: Long,
-    val voteAverage: Long,
+    val vote_count: Long,
+    val vote_average: Double,
     val title: String,
-    val releaseDate: String,
-    val originalLanguage: String,
-    val originalTitle: String,
-    val genreIDS: List<Long>,
-    val backdropPath: String? = null,
+    val release_date: String,
+    val original_language: String,
+    val original_title: String,
+    val genre_ids: List<Long>,
+    val backdrop_path: String? = null,
     val adult: Boolean,
     val overview: String,
-    val posterPath: String? = null
+    val poster_path: String? = null
 )
