@@ -1,5 +1,9 @@
 package com.beeitstudio.movieapp.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Movie (
     val popularity: Double,
     val id: Long,
@@ -15,4 +19,4 @@ data class Movie (
     val adult: Boolean,
     val overview: String,
     val poster_path: String? = null
-)
+): Parcelable

@@ -3,69 +3,82 @@ package com.beeitstudio.movieapp.ui.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.beeitstudio.movieapp.R
 import com.beeitstudio.movieapp.models.Movie
-import com.beeitstudio.movieapp.utils.AppConstants.Companion.BASE_IMG_URL
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import kotlinx.android.synthetic.main.item_home.view.*
+import kotlinx.android.synthetic.main.item_banner.view.*
+import kotlinx.android.synthetic.main.item_rv.view.*
 
-class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HomeAdapter : RecyclerView.Adapter<BaseViewHolder<*>>() {
 
-    val TAG = HomeAdapter::class.java.simpleName
+    private var parentList: List<List<Movie>> = ArrayList()
 
-    private var items: List<Movie> = ArrayList()
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return HomeViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_home,
-                parent,
-                false
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> =
+        when (viewType) {
+            R.layout.item_banner -> BannerViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_banner,
+                    parent,
+                    false
+                )
             )
-        )
-    }
+            else -> MovieItemViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_rv,
+                    parent,
+                    false
+                )
+            )
+        }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
 
-    override fun onBindViewHolder(
-        holder: RecyclerView.ViewHolder,
-        position: Int
-    ) {
+    override fun getItemCount() = parentList.size
+
+    override fun getItemViewType(position: Int): Int =
+        when (position) {
+            0 -> R.layout.item_banner
+            else -> R.layout.item_rv
+        }
+
+
+    override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
+        if (parentList.isEmpty())
+            return
+
         when (holder) {
-            is HomeViewHolder -> {
-                holder.bind(items[position])
-            }
+            is BannerViewHolder -> holder.bind(parentList[0])
+            is MovieItemViewHolder -> holder.bind(parentList[1])
         }
     }
 
-    fun submitList(newList: List<Movie>) {
-        items = newList
+    fun submitList(newList: List<List<Movie>>) {
+        parentList = newList
         notifyDataSetChanged()
     }
 
-    class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvTitle = itemView.tv_title
-        val tvRating = itemView.tv_rating
-        val ivPoster = itemView.iv_poster
+    class BannerViewHolder(val view: View) : BaseViewHolder<List<Movie>>(view) {
 
-        fun bind(movie: Movie) {
-            tvTitle.text = movie.title
-            tvRating.text = movie.vote_average.toString()
+        private val viewpager = view.viewpager
 
-            val requestOptions = RequestOptions()
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
-
-            val imgurl = "$BASE_IMG_URL/w185${movie.poster_path}"
-
-            Glide.with(itemView.context)
-                .load(imgurl)
-                .apply(requestOptions)
-                .into(ivPoster)
+        override fun bind(item: List<Movie>) {
+            val adapter = BannerPagerAdapter(item)
+            viewpager.adapter = adapter
         }
+
+    }
+
+    class MovieItemViewHolder(val view: View) : BaseViewHolder<List<Movie>>(view) {
+
+        private val rv: RecyclerView = view.rv
+
+        override fun bind(item: List<Movie>) {
+            rv.layoutManager = GridLayoutManager(view.context, 2)
+            val adapter = HomeFragAdapter()
+            adapter.submitList(item)
+            rv.adapter = adapter
+
+        }
+
     }
 }

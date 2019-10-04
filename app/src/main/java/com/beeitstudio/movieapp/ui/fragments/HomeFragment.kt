@@ -8,13 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.beeitstudio.movieapp.R
 import com.beeitstudio.movieapp.models.Status
 import com.beeitstudio.movieapp.ui.adapters.GridItemDecoration
-import com.beeitstudio.movieapp.ui.adapters.HomeAdapter
+import com.beeitstudio.movieapp.ui.adapters.HomeFragAdapter
 import com.beeitstudio.movieapp.viewmodels.HomeViewModel
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
@@ -24,7 +23,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var rootView: View
     private lateinit var rv: RecyclerView
-    private lateinit var adapter: HomeAdapter
+    private lateinit var fragAdapter: HomeFragAdapter
 
     private lateinit var viewModel: HomeViewModel
 
@@ -62,7 +61,7 @@ class HomeFragment : Fragment() {
                     val data = it.data
                     data?.let { response ->
                         Log.d(TAG, response.results.toString())
-                        adapter.submitList(response.results)
+                        fragAdapter.submitList(response.results)
                     }
                 }
                 Status.LOADING -> Log.d(TAG, "Loading")
@@ -76,8 +75,8 @@ class HomeFragment : Fragment() {
 
         rv.addItemDecoration(GridItemDecoration(8))
         rv.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        adapter = HomeAdapter()
-        rv.adapter = adapter
+        fragAdapter = HomeFragAdapter()
+        rv.adapter = fragAdapter
     }
 
 }
