@@ -60,10 +60,12 @@ class HomeAdapter : RecyclerView.Adapter<BaseViewHolder<*>>() {
     class BannerViewHolder(val view: View) : BaseViewHolder<List<Movie>>(view) {
 
         private val viewpager = view.viewpager
+        private val indicator = view.indicator
 
         override fun bind(item: List<Movie>) {
             val adapter = BannerPagerAdapter(item)
             viewpager.adapter = adapter
+            indicator.setupWithViewPager(viewpager)
         }
 
     }
@@ -74,6 +76,7 @@ class HomeAdapter : RecyclerView.Adapter<BaseViewHolder<*>>() {
 
         override fun bind(item: List<Movie>) {
             rv.layoutManager = GridLayoutManager(view.context, 2)
+            rv.addItemDecoration(GridItemDecoration(20))
             val adapter = HomeFragAdapter()
             adapter.submitList(item)
             rv.adapter = adapter
