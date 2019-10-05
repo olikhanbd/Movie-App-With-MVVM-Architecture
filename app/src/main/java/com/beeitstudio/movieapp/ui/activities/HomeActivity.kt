@@ -1,5 +1,6 @@
 package com.beeitstudio.movieapp.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -12,15 +13,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.beeitstudio.movieapp.R
+import com.beeitstudio.movieapp.listeners.MovieSelectionListener
 import com.beeitstudio.movieapp.models.Status
 import com.beeitstudio.movieapp.ui.adapters.HomeAdapter
 import com.beeitstudio.movieapp.utils.AppUtils.Companion.showSnackBar
 import com.beeitstudio.movieapp.viewmodels.HomeViewModel
 import com.facebook.shimmer.ShimmerFrameLayout
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), MovieSelectionListener {
 
-    val TAG = HomeActivity::class.java.simpleName
+    private val TAG = HomeActivity::class.java.simpleName
 
     private lateinit var rootView: ConstraintLayout
     private lateinit var toolbar: Toolbar
@@ -78,7 +80,7 @@ class HomeActivity : AppCompatActivity() {
             this, RecyclerView.VERTICAL,
             false
         )
-        homeAdapter = HomeAdapter()
+        homeAdapter = HomeAdapter(this)
         rv.adapter = homeAdapter
     }
 
@@ -97,5 +99,16 @@ class HomeActivity : AppCompatActivity() {
     private fun hideLoading() {
         shimmerContainer.stopShimmer()
         shimmerContainer.visibility = View.GONE
+    }
+
+    override fun onMovieSelected(id: Long) {
+        Log.d(TAG, "onMovieSelected: id: $id")
+        val intent = Intent(this, MovieDetailsActivity::class.java)
+        intent.putExtra(MovieDetailsActivity.ARG_MOVIE_ID, id)
+        startActivity(intent)
+    }
+
+    override fun onBannerItemSelected(id: Long) {
+        Log.d(TAG, "onBannerItemSelected: id: $id")
     }
 }

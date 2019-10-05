@@ -5,13 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.beeitstudio.movieapp.R
+import com.beeitstudio.movieapp.listeners.MovieSelectionListener
 import com.beeitstudio.movieapp.models.Movie
 import com.beeitstudio.movieapp.utils.AppConstants
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.single_banner_item.view.*
 
-class BannerPagerAdapter(private val movies: List<Movie>) :
+class BannerPagerAdapter(private val listener: MovieSelectionListener, private val movies: List<Movie>) :
     PagerAdapter() {
     override fun isViewFromObject(view: View, `object`: Any): Boolean = view == `object`
 
@@ -40,6 +41,10 @@ class BannerPagerAdapter(private val movies: List<Movie>) :
                 .load(imgurl)
                 .apply(requestOptions)
                 .into(ivBanner)
+        }
+
+        fab.setOnClickListener{
+            listener.onBannerItemSelected(movie.id)
         }
 
         container.addView(view)

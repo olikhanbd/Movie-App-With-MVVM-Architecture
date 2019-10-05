@@ -5,13 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.beeitstudio.movieapp.R
+import com.beeitstudio.movieapp.listeners.MovieSelectionListener
 import com.beeitstudio.movieapp.models.Movie
 import com.beeitstudio.movieapp.utils.AppConstants.Companion.BASE_IMG_URL
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.single_movie_item.view.*
 
-class MovieAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MovieAdapter(private val listener: MovieSelectionListener) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val TAG = MovieAdapter::class.java.simpleName
 
@@ -38,6 +40,9 @@ class MovieAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         when (holder) {
             is HomeViewHolder -> {
                 holder.bind(items[position])
+                holder.rootView.setOnClickListener {
+                    listener.onMovieSelected(items[position].id)
+                }
             }
         }
     }
@@ -48,6 +53,7 @@ class MovieAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val rootView = itemView.root_view
         val tvTitle = itemView.tv_title
         val tvRating = itemView.tv_rating
         val ivPoster = itemView.iv_poster

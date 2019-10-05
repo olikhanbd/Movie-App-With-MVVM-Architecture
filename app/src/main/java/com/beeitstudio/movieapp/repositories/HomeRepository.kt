@@ -3,9 +3,7 @@ package com.beeitstudio.movieapp.repositories
 import androidx.lifecycle.LiveData
 import com.beeitstudio.movieapp.api.ApiClient
 import com.beeitstudio.movieapp.models.HomeResource
-import com.beeitstudio.movieapp.models.Movie
 import com.beeitstudio.movieapp.models.Resource
-import com.beeitstudio.movieapp.models.TmdbResponse
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -14,7 +12,7 @@ object HomeRepository {
 
     var job: CompletableJob? = null
 
-    fun getHomeData(apiKey: String, page: Int, language:String):
+    fun getHomeData(apiKey: String, page: Int, language: String):
             LiveData<Resource<List<HomeResource>>> {
 
         job = Job()
@@ -28,18 +26,18 @@ object HomeRepository {
                         try {
                             postValue(Resource.loading())
                             val nowPlaying =
-                                ApiClient.apiService.getNowPlaying(apiKey,page, language)
+                                ApiClient.apiService.getNowPlaying(apiKey, page, language)
 
                             val upcoming =
-                                ApiClient.apiService.getUpcoming(apiKey,page, language)
+                                ApiClient.apiService.getUpcoming(apiKey, page, language)
 
                             val popular =
-                                ApiClient.apiService.getPopular(apiKey,page, language)
+                                ApiClient.apiService.getPopular(apiKey, page, language)
 
                             val toprated =
-                                ApiClient.apiService.getTopRated(apiKey,page, language)
+                                ApiClient.apiService.getTopRated(apiKey, page, language)
 
-                            val homeList: MutableList<HomeResource> = ArrayList()
+                            val homeList: MutableList<HomeResource> = mutableListOf()
 
                             homeList.add(HomeResource("Now Playing", nowPlaying))
                             homeList.add(HomeResource("Upcoming", upcoming))
