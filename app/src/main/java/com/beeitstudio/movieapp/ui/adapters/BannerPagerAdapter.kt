@@ -9,7 +9,7 @@ import com.beeitstudio.movieapp.models.Movie
 import com.beeitstudio.movieapp.utils.AppConstants
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import kotlinx.android.synthetic.main.fragment_banner.view.*
+import kotlinx.android.synthetic.main.single_banner_item.view.*
 
 class BannerPagerAdapter(private val movies: List<Movie>) :
     PagerAdapter() {
@@ -20,7 +20,7 @@ class BannerPagerAdapter(private val movies: List<Movie>) :
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val view = LayoutInflater.from(container.context)
-            .inflate(R.layout.fragment_banner, container, false)
+            .inflate(R.layout.single_banner_item, container, false)
 
         val ivBanner = view.iv_banner
         val fab = view.floatingActionButton
@@ -34,7 +34,7 @@ class BannerPagerAdapter(private val movies: List<Movie>) :
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_background)
 
-            val imgurl = "${AppConstants.BASE_IMG_URL}/w185${poster_path}"
+            val imgurl = "${AppConstants.BASE_IMG_URL}/w400${poster_path}"
 
             Glide.with(view.context)
                 .load(imgurl)
@@ -46,5 +46,5 @@ class BannerPagerAdapter(private val movies: List<Movie>) :
         return view
     }
 
-    override fun getCount(): Int = movies.size
+    override fun getCount(): Int = if(movies.size > 10) 10 else movies.size
 }

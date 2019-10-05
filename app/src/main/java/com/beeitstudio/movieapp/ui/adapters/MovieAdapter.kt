@@ -9,18 +9,18 @@ import com.beeitstudio.movieapp.models.Movie
 import com.beeitstudio.movieapp.utils.AppConstants.Companion.BASE_IMG_URL
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import kotlinx.android.synthetic.main.item_home.view.*
+import kotlinx.android.synthetic.main.single_movie_item.view.*
 
-class HomeFragAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MovieAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val TAG = HomeFragAdapter::class.java.simpleName
+    val TAG = MovieAdapter::class.java.simpleName
 
     private var items: List<Movie> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return HomeViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.item_home,
+                R.layout.single_movie_item,
                 parent,
                 false
             )

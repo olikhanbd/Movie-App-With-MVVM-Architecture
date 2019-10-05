@@ -2,10 +2,10 @@ package com.beeitstudio.movieapp.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.beeitstudio.movieapp.models.Movie
+import com.beeitstudio.movieapp.models.HomeResource
 import com.beeitstudio.movieapp.models.Resource
 import com.beeitstudio.movieapp.models.TmdbResponse
-import com.beeitstudio.movieapp.repositories.MainRepository
+import com.beeitstudio.movieapp.repositories.HomeRepository
 
 class HomeViewModel : ViewModel() {
 
@@ -15,10 +15,10 @@ class HomeViewModel : ViewModel() {
     val lan = "en-US"
     val page = 1
 
-    val response: LiveData<Resource<TmdbResponse>> =
-        MainRepository.getLatest(apiKey,page, lan)
+    val response: LiveData<Resource<List<HomeResource>>> =
+        HomeRepository.getHomeData(apiKey,page, lan)
 
     fun cancelJob() {
-        MainRepository.cancelJobs()
+        HomeRepository.cancelJobs()
     }
 }

@@ -3,16 +3,18 @@ package com.beeitstudio.movieapp.ui.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.beeitstudio.movieapp.R
+import com.beeitstudio.movieapp.models.HomeResource
 import com.beeitstudio.movieapp.models.Movie
 import kotlinx.android.synthetic.main.item_banner.view.*
 import kotlinx.android.synthetic.main.item_rv.view.*
 
 class HomeAdapter : RecyclerView.Adapter<BaseViewHolder<*>>() {
 
-    private var parentList: List<List<Movie>> = ArrayList()
+    private var parentList: List<HomeResource> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> =
         when (viewType) {
@@ -47,12 +49,12 @@ class HomeAdapter : RecyclerView.Adapter<BaseViewHolder<*>>() {
             return
 
         when (holder) {
-            is BannerViewHolder -> holder.bind(parentList[0])
-            is MovieItemViewHolder -> holder.bind(parentList[1])
+            is BannerViewHolder -> holder.bind(parentList[position].response.results)
+            is MovieItemViewHolder -> holder.bind(parentList[position])
         }
     }
 
-    fun submitList(newList: List<List<Movie>>) {
+    fun submitList(newList: List<HomeResource>) {
         parentList = newList
         notifyDataSetChanged()
     }
@@ -70,15 +72,19 @@ class HomeAdapter : RecyclerView.Adapter<BaseViewHolder<*>>() {
 
     }
 
-    class MovieItemViewHolder(val view: View) : BaseViewHolder<List<Movie>>(view) {
+    class MovieItemViewHolder(val view: View) : BaseViewHolder<HomeResource>(view) {
 
         private val rv: RecyclerView = view.rv
+        private val tv: TextView = view.tv_title
 
-        override fun bind(item: List<Movie>) {
-            rv.layoutManager = GridLayoutManager(view.context, 2)
+        override fun bind(item: HomeResource) {
+
+            tv.text = item.type
+
+            rv.layoutManager = LinearLayoutManager(view.context, RecyclerView.HORIZONTAL, false)
             rv.addItemDecoration(GridItemDecoration(20))
-            val adapter = HomeFragAdapter()
-            adapter.submitList(item)
+            val adapter = MovieAdapter()
+            adapter.submitList(item.response.results)
             rv.adapter = adapter
 
         }
