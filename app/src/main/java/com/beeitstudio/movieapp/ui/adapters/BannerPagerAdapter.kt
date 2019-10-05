@@ -31,8 +31,8 @@ class BannerPagerAdapter(private val movies: List<Movie>) :
         movie.apply {
             tvTitle.text = title
             val requestOptions = RequestOptions()
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
+                .placeholder(R.drawable.poster_placeholder)
+                .error(R.drawable.poster_placeholder)
 
             val imgurl = "${AppConstants.BASE_IMG_URL}/w400${poster_path}"
 

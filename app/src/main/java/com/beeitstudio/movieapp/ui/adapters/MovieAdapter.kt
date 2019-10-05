@@ -57,8 +57,8 @@ class MovieAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             tvRating.text = movie.vote_average.toString()
 
             val requestOptions = RequestOptions()
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
+                .placeholder(R.drawable.poster_placeholder)
+                .error(R.drawable.poster_placeholder)
 
             val imgurl = "$BASE_IMG_URL/w185${movie.poster_path}"
 
