@@ -41,7 +41,7 @@ class MovieAdapter(private val listener: MovieSelectionListener) :
             is HomeViewHolder -> {
                 holder.bind(items[position])
                 holder.rootView.setOnClickListener {
-                    listener.onMovieSelected(items[position].id)
+                    listener.onMovieSelected(items[position].id, it.iv_poster)
                 }
             }
         }

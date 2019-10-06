@@ -1,5 +1,6 @@
 package com.beeitstudio.movieapp.ui.activities
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -101,11 +102,16 @@ class HomeActivity : AppCompatActivity(), MovieSelectionListener {
         shimmerContainer.visibility = View.GONE
     }
 
-    override fun onMovieSelected(id: Long) {
+    override fun onMovieSelected(id: Long, view: View) {
         Log.d(TAG, "onMovieSelected: id: $id")
         val intent = Intent(this, MovieDetailsActivity::class.java)
         intent.putExtra(MovieDetailsActivity.ARG_MOVIE_ID, id)
-        startActivity(intent)
+
+        val options = ActivityOptions.makeSceneTransitionAnimation(
+            this, view, "poster"
+        )
+
+        startActivity(intent, options.toBundle())
     }
 
     override fun onBannerItemSelected(id: Long) {

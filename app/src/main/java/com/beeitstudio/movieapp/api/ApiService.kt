@@ -1,7 +1,9 @@
 package com.beeitstudio.movieapp.api
 
+import com.beeitstudio.movieapp.models.MovieDetails
 import com.beeitstudio.movieapp.models.TmdbResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -33,5 +35,11 @@ interface ApiService {
         @Query("page") page: Int,
         @Query("language") language: String
     ): TmdbResponse
+
+    @GET("movie/{movie_id}")
+    suspend fun getMovieDetails(
+        @Path("movie_id") movie_id: Long,
+        @Query("api_key") api_key: String
+    ): MovieDetails
 
 }
