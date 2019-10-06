@@ -1,5 +1,6 @@
 package com.beeitstudio.movieapp.api
 
+import com.beeitstudio.movieapp.models.CreditResponse
 import com.beeitstudio.movieapp.models.MovieDetails
 import com.beeitstudio.movieapp.models.TmdbResponse
 import retrofit2.http.GET
@@ -42,4 +43,9 @@ interface ApiService {
         @Query("api_key") api_key: String
     ): MovieDetails
 
+    @GET("movie/{movie_id}/credits")
+    suspend fun getCredits(
+        @Path("movie_id") movie_id: Long,
+        @Query("api_key") api_key: String
+    ): CreditResponse
 }

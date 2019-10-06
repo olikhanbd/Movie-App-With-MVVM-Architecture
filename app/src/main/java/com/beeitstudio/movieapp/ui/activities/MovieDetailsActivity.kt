@@ -2,14 +2,19 @@ package com.beeitstudio.movieapp.ui.activities
 
 import android.os.Bundle
 import android.util.Log
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.beeitstudio.movieapp.R
-import com.beeitstudio.movieapp.models.MovieDetails
+import com.beeitstudio.movieapp.models.MovieDetailsResource
 import com.beeitstudio.movieapp.models.Status
+import com.beeitstudio.movieapp.ui.adapters.CastAdapter
+import com.beeitstudio.movieapp.ui.adapters.GridItemDecoration
 import com.beeitstudio.movieapp.utils.AppConstants
 import com.beeitstudio.movieapp.viewmodels.MovieDetailsViewModel
 import com.bumptech.glide.Glide
@@ -25,6 +30,8 @@ class MovieDetailsActivity : AppCompatActivity() {
     private lateinit var tvTitle: TextView
     private lateinit var tvRating: TextView
     private lateinit var tvDescription: TextView
+    private lateinit var rvCast: RecyclerView
+    private lateinit var castAdapter: CastAdapter
 
     private lateinit var viewModel: MovieDetailsViewModel
 
@@ -66,19 +73,32 @@ class MovieDetailsActivity : AppCompatActivity() {
         tvTitle = findViewById(R.id.tv_title)
         tvRating = findViewById(R.id.tv_rating)
         tvDescription = findViewById(R.id.tv_description)
+        rvCast = findViewById(R.id.rv_cast)
+
+        rvCast.layoutManager =
+            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        rvCast.addItemDecoration(GridItemDecoration(20))
+        castAdapter = CastAdapter()
+        rvCast.adapter = castAdapter
+
     }
 
-    private fun setView(movie: MovieDetails?) {
-        tvTitle.text = movie?.title
-        tvRating.text = movie?.vote_average.toString()
-        tvDescription.text = movie?.overview
+    private fun setView(movieDetailsResource: MovieDetailsResource?) {
+
+        val movie = movieDetailsResource?.movieDetails
+
+        movie?.apply {
+            tvTitle.text = title
+            tvRating.text = vote_average.toString()
+            tvDescription.text = overview
+        }
 
         val coverImg = "${AppConstants.BASE_IMG_URL}/w400${movie?.backdrop_path}"
         val poster = "${AppConstants.BASE_IMG_URL}/w185${movie?.poster_path}"
 
         val requestOptions = RequestOptions()
-            .placeholder(R.drawable.blank_poster)
-            .error(R.drawable.blank_poster)
+            .placeholder(R.drawable.poster_placeholder)
+            .error(R.drawable.poster_placeholder)
 
         Glide.with(this)
             .load(coverImg)
@@ -89,5 +109,11 @@ class MovieDetailsActivity : AppCompatActivity() {
             .load(poster)
             .apply(requestOptions)
             .into(ivPoster)
+
+        ivCover.animation = AnimationUtils.loadAnimation(this, R.anim.scale_animation)
+
+        val cast = movieDetailsResource?.credits?.cast
+        if (cast != null)
+            castAdapter.submitList(cast)
     }
 }
