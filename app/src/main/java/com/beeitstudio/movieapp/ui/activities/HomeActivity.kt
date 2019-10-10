@@ -107,11 +107,11 @@ class HomeActivity : AppCompatActivity(), MovieSelectionListener {
         val intent = Intent(this, MovieDetailsActivity::class.java)
         intent.putExtra(MovieDetailsActivity.ARG_MOVIE_ID, id)
 
-        val options = ActivityOptions.makeSceneTransitionAnimation(
-            this, view, "poster"
-        )
+//        val options = ActivityOptions.makeSceneTransitionAnimation(
+//            this, view, "poster"
+//        )
 
-        startActivity(intent, options.toBundle())
+        startActivity(intent)
     }
 
     override fun onBannerItemSelected(id: Long) {

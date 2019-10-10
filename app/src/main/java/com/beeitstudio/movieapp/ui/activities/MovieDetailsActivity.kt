@@ -2,10 +2,14 @@ package com.beeitstudio.movieapp.ui.activities
 
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +23,7 @@ import com.beeitstudio.movieapp.utils.AppConstants
 import com.beeitstudio.movieapp.viewmodels.MovieDetailsViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.facebook.shimmer.ShimmerFrameLayout
 
 class MovieDetailsActivity : AppCompatActivity() {
 
@@ -32,6 +37,9 @@ class MovieDetailsActivity : AppCompatActivity() {
     private lateinit var tvDescription: TextView
     private lateinit var rvCast: RecyclerView
     private lateinit var castAdapter: CastAdapter
+    private lateinit var toolbar: Toolbar
+    private lateinit var rootView: ConstraintLayout
+    private lateinit var shimmerContainer: ShimmerFrameLayout
 
     private lateinit var viewModel: MovieDetailsViewModel
 
@@ -54,20 +62,38 @@ class MovieDetailsActivity : AppCompatActivity() {
             when (it.status) {
                 Status.LOADING -> {
                     Log.d(TAG, "loading")
+                    showLoading()
                 }
                 Status.ERROR -> {
                     Log.d(TAG, "Error: ${it.message}")
+                    hideLoading()
                 }
                 Status.SUCCESS -> {
                     Log.d(TAG, "Success")
                     setView(it.data)
+                    hideLoading()
                 }
             }
         })
 
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun initView() {
+        rootView = findViewById(R.id.root_view)
+        shimmerContainer = findViewById(R.id.shimmer_view_container)
+        toolbar = findViewById(R.id.toolbar)
         ivCover = findViewById(R.id.iv_cover)
         ivPoster = findViewById(R.id.iv_poster)
         tvTitle = findViewById(R.id.tv_title)
@@ -81,6 +107,15 @@ class MovieDetailsActivity : AppCompatActivity() {
         castAdapter = CastAdapter()
         rvCast.adapter = castAdapter
 
+        initToolbar()
+
+    }
+
+    private fun initToolbar() {
+        toolbar.title = ""
+        setSupportActionBar(toolbar)
+        actionBar?.setDisplayShowTitleEnabled(false)
+        actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setView(movieDetailsResource: MovieDetailsResource?) {
@@ -115,5 +150,17 @@ class MovieDetailsActivity : AppCompatActivity() {
         val cast = movieDetailsResource?.credits?.cast
         if (cast != null)
             castAdapter.submitList(cast)
+    }
+
+    private fun showLoading() {
+        rootView.visibility = View.GONE
+        shimmerContainer.visibility = View.VISIBLE
+        shimmerContainer.startShimmer()
+    }
+
+    private fun hideLoading() {
+        rootView.visibility = View.VISIBLE
+        shimmerContainer.stopShimmer()
+        shimmerContainer.visibility = View.GONE
     }
 }
